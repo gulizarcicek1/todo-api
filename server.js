@@ -1,9 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var _ = require('underscore');
 
 var app = express();
 var PORT = process.env.PORT || 3000;
-
 var todos =[];
 var todoNextId = 1;
 
@@ -13,7 +13,6 @@ app.get('/',function(req,res){
 	res.send('Todo API Root');
 });
 
-
 //Get /todos
 app.get('/todos', function(req,res){
 	res.json(todos);
@@ -22,13 +21,8 @@ app.get('/todos', function(req,res){
 //Get /todos/:id  
 app.get('/todos/:id',function(req,res){
 	var todoId = parseInt(req.params.id, 10);
-    var machecTodo;
+    var machecTodo = _.findWhere(todos, {id: todoId});
     
-    todos.forEach(function(todo){
-    	 if(todoId === todo.id){
-    	 	machecTodo = todo;
-    	 }
-    });
 
     if (machecTodo) {
     	res.json(machecTodo);
