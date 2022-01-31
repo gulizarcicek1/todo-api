@@ -47,9 +47,21 @@ app.post('/todos', function (req,res) {
 	//push body into array
 
 	res.json(body);
-
-
 });
+
+// DELETE /todos/:id
+app.delete('/todos/:id', function(req,res){
+	var todoId = parseInt(req.params.id, 10);
+	var machecTodo = _.findWhere(todos,{id: todoId});
+
+	if(!machecTodo){
+		res.status(404).json("error :no todo fpund with that id");
+	}else{
+		todos = _.without(todos,machecTodo);
+		res.json(machecTodo);
+	}
+});
+
 
 app.listen(PORT, function(){
 	console.log('express listening on port' + PORT + '!');
