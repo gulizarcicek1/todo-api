@@ -9,7 +9,7 @@ var sequelize = new Sequelize(undefined,undefined,undefined,{
 var db = {};
 
 //db.todo = sequelize.import(__dirname + '/models/todo.js');
- db.todo = require(path.join(__dirname, '/models/todo.js'))(sequelize, Sequelize.DataTypes)
+db.todo = require(path.join(__dirname, '/models/todo.js'))(sequelize, Sequelize.DataTypes)
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
