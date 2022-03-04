@@ -16,7 +16,7 @@ app.get('/',function(req,res){
 
 //Get /todos?completed=true
 app.get('/todos', function(req,res){
-	var queryParams = req.query;
+	var query = req.query;
     var where = {};  
 
     if (query.hasOwnProperty('completed') && query.completed === 'true') {
@@ -24,9 +24,7 @@ app.get('/todos', function(req,res){
     } else if(query.hasOwnProperty('completed') &&query.completed === 'false'){
     	where.completed = false;
     }
-
-
-
+  
     if(query.hasOwnProperty('q') && query.q.lenght > 0){
     	where.description = {
     		$like: '%' + query.q + '%'
@@ -68,14 +66,22 @@ app.post('/todos', function (req,res) {
 // DELETE /todos/:id
 app.delete('/todos/:id', function(req,res){
 	var todoId = parseInt(req.params.id, 10);
-	var machecTodo = _.findWhere(todos,{id: todoId});
 
-	if(!machecTodo){
-		res.status(404).json("error :no todo fpund with that id");
-	}else{
-		todos = _.without(todos,machecTodo);
-		res.json(machecTodo);
-	}
+	db.todo.destroy({
+		where: {
+			id: todoId
+		}
+	}).then(function(rowDeleted){
+		if(rowDeleted === 0){
+			res.status(404).json({
+				error: 'No todo with id'
+			});
+		}else {
+			res.status(204).send();
+		}
+	},function(){
+		res.status(500).send();
+	});
 });
 
 
